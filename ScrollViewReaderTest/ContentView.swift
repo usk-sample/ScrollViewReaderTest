@@ -13,7 +13,7 @@ struct ContentView: View {
     
     @State var text: String = ""
     @State var value: ScrollViewProxy?
-
+    
     var body: some View {
         VStack {
             Spacer()
@@ -26,6 +26,7 @@ struct ContentView: View {
                         }
                     }.onAppear {
                         self.value = value
+                        self.value?.scrollTo(self.viewModel.messages.count, anchor: .bottom) // scroll to bottom at first
                     }
                 }
             }
@@ -35,7 +36,8 @@ struct ContentView: View {
                 HStack {
                     TextEditor.init(text: self.$text)
                         .frame(height:40)
-                    Button.init(action: { self.viewModel.send(text: self.text) }, label: {
+                        .cornerRadius(4.0)
+                    Button.init(action: { self.sendText() }, label: {
                         Image(systemName: "paperplane.fill")
                             .font(.system(size: 24))
                     }).disabled(self.text.isEmpty)
@@ -44,6 +46,20 @@ struct ContentView: View {
             }.background(Color(white: 0.95))
         }
     }
+}
+
+extension ContentView {
+    
+    func sendText() {
+        viewModel.send(text: text)
+        text = ""
+        guard let message = viewModel.messages.last else { return }
+        debugPrint(message)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+            self.value?.scrollTo(message.id, anchor: .bottom)
+        })
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

@@ -19,6 +19,7 @@ struct ChatView: View {
             Text(message.message)
                 .padding()
                 .background(self.message.type == .sent ? Color.blue : Color.green)
+                .cornerRadius(8.0)
 
             if self.message.type == .received {
                 Spacer()
