@@ -27,7 +27,7 @@ struct ContentView: View {
                     }.onAppear {
                         self.value = value
                         self.value?.scrollTo(self.viewModel.messages.count, anchor: .bottom) // scroll to bottom at first
-                    }
+                    }.animation(.easeInOut)
                 }
             }
             
@@ -56,7 +56,10 @@ extension ContentView {
         guard let message = viewModel.messages.last else { return }
         debugPrint(message)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-            self.value?.scrollTo(message.id, anchor: .bottom)
+            withAnimation {
+                self.value?.scrollTo(message.id, anchor: .bottom)
+            }
+
         })
     }
     
