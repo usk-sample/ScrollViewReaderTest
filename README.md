@@ -11,3 +11,7 @@
 ## Screenshot
 
 <img width="50%" src="./ScreenShot_01.png" />
+
+## LICENSE
+
+[LICENSE]("LICENSE")
