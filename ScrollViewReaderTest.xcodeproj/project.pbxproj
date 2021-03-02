@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A8274F1825EE1733008B352F /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A8274F1725EE1733008B352F /* Introspect */; };
 		A8AE3F432567B714006775F8 /* ScrollViewReaderTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8AE3F422567B714006775F8 /* ScrollViewReaderTestApp.swift */; };
 		A8AE3F452567B714006775F8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8AE3F442567B714006775F8 /* ContentView.swift */; };
 		A8AE3F472567B715006775F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8AE3F462567B715006775F8 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8274F1825EE1733008B352F /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +99,9 @@
 			dependencies = (
 			);
 			name = ScrollViewReaderTest;
+			packageProductDependencies = (
+				A8274F1725EE1733008B352F /* Introspect */,
+			);
 			productName = ScrollViewReaderTest;
 			productReference = A8AE3F3F2567B714006775F8 /* ScrollViewReaderTest.app */;
 			productType = "com.apple.product-type.application";
@@ -124,6 +129,9 @@
 				Base,
 			);
 			mainGroup = A8AE3F362567B714006775F8;
+			packageReferences = (
+				A8274F1625EE1733008B352F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = A8AE3F402567B714006775F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -342,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A8274F1625EE1733008B352F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A8274F1725EE1733008B352F /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8274F1625EE1733008B352F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A8AE3F372567B714006775F8 /* Project object */;
 }

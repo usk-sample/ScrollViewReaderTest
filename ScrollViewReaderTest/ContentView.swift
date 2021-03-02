@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Introspect
 
 struct ContentView: View {
     
     @ObservedObject private var viewModel: ViewModel = .init()
     
+    @State var canLoadPrevious: Bool = false
     @State var text: String = ""
     @State var value: ScrollViewProxy?
     
@@ -20,15 +22,28 @@ struct ContentView: View {
             
             ScrollView {
                 ScrollViewReader { value in
+
                     LazyVStack(alignment: .center, spacing: 16) {
+
+                        Text("Loading....").onAppear(perform: {
+                            if self.canLoadPrevious {
+                                debugPrint("Loading...")
+                            }
+                        })
+                        
                         ForEach.init(self.viewModel.messages, id: \.id) { message in
                             ChatView.init(message: message)
                         }
                     }.onAppear {
                         self.value = value
                         self.value?.scrollTo(self.viewModel.messages.count, anchor: .bottom) // scroll to bottom at first
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.canLoadPrevious = true
+                        }
                     }.animation(.easeInOut)
                 }
+            }.introspectScrollView { scrollView in
+                scrollView.bounces = false
             }
             
             //text input
