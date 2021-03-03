@@ -13,6 +13,12 @@ struct MessageModel {
     let type: MessageType
 }
 
+extension MessageModel: Equatable {
+    static func == (lhs: MessageModel, rhs: MessageModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 enum MessageType {
     case sent
     case received

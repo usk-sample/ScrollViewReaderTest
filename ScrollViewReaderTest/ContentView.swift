@@ -12,27 +12,23 @@ struct ContentView: View {
     
     @ObservedObject private var viewModel: ViewModel = .init()
     
+    var observer: ScrollViewObserver = .init()
+    
     @State var canLoadPrevious: Bool = false
     @State var text: String = ""
     @State var value: ScrollViewProxy?
     
     var body: some View {
         VStack {
-            Spacer()
             
             ScrollView {
+                
                 ScrollViewReader { value in
 
                     LazyVStack(alignment: .center, spacing: 16) {
-
-                        Text("Loading....").onAppear(perform: {
-                            if self.canLoadPrevious {
-                                debugPrint("Loading...")
-                            }
-                        })
                         
                         ForEach.init(self.viewModel.messages, id: \.id) { message in
-                            ChatView.init(message: message)
+                            ChatView.init(message: message, isTop: self.viewModel.messages.firstIndex(of: message) == 0)
                         }
                     }.onAppear {
                         self.value = value
@@ -44,6 +40,7 @@ struct ContentView: View {
                 }
             }.introspectScrollView { scrollView in
                 scrollView.bounces = false
+                scrollView.delegate = observer
             }
             
             //text input
@@ -78,6 +75,14 @@ extension ContentView {
         })
     }
     
+}
+
+class ScrollViewObserver: NSObject, UIScrollViewDelegate {
+    
+    //一番上に到達した時、
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        debugPrint(scrollView.contentOffset)
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
