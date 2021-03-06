@@ -10,7 +10,8 @@ import SwiftUI
 struct ChatView: View {
     
     var message: MessageModel
-    var isTop: Bool //Indicate that this view is top of item
+    var isTop: Bool
+    var onAppear: () -> Void
     
     var body: some View {
         HStack {
@@ -30,17 +31,17 @@ struct ChatView: View {
         .padding(.vertical, 8)
         .padding(.leading, self.message.type == .received ? 16 : 64)
         .padding(.trailing, self.message.type == .received ? 64 : 16)
-        .onAppear {
-            if self.isTop {
-                debugPrint("onAppear")
+        .onAppear(perform: {
+            if isTop {
+                onAppear()
             }
-        }
+        })
 
     }
 }
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(message: .init(id: 0, message: "Hello!", type: .sent), isTop: false)
+        ChatView(message: .init(id: 0, message: "Hello!", type: .sent), isTop: true, onAppear: { })
     }
 }

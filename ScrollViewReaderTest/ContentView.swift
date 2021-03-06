@@ -11,9 +11,7 @@ import Introspect
 struct ContentView: View {
     
     @ObservedObject private var viewModel: ViewModel = .init()
-    
-    var observer: ScrollViewObserver = .init()
-    
+        
     @State var canLoadPrevious: Bool = false
     @State var text: String = ""
     @State var value: ScrollViewProxy?
@@ -28,19 +26,33 @@ struct ContentView: View {
                     LazyVStack(alignment: .center, spacing: 16) {
                         
                         ForEach.init(self.viewModel.messages, id: \.id) { message in
-                            ChatView.init(message: message, isTop: self.viewModel.messages.firstIndex(of: message) == 0)
+                            ChatView.init(message: message, isTop: self.viewModel.messages.firstIndex(of: message) == 0) {
+                                guard canLoadPrevious else { return }
+                                debugPrint("onAppear top")
+                                                                
+                                let firstId = viewModel.messages.first!.id
+                                debugPrint("first : \(firstId)")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    self.viewModel.loadPrevious()
+                                    DispatchQueue.main.async {
+                                        self.value?.scrollTo(firstId, anchor: .top)
+                                    }
+                                }
+                            }
                         }
                     }.onAppear {
+                        debugPrint("[LazyVStack]onAppear")
                         self.value = value
-                        self.value?.scrollTo(self.viewModel.messages.count, anchor: .bottom) // scroll to bottom at first
+                        if let last = self.viewModel.messages.last {
+                            self.value?.scrollTo(last.id, anchor: .bottom) // scroll to bottom at first
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             self.canLoadPrevious = true
                         }
-                    }.animation(.easeInOut)
+                    }.animation(.none)
                 }
             }.introspectScrollView { scrollView in
                 scrollView.bounces = false
-                scrollView.delegate = observer
             }
             
             //text input
@@ -75,14 +87,6 @@ extension ContentView {
         })
     }
     
-}
-
-class ScrollViewObserver: NSObject, UIScrollViewDelegate {
-    
-    //一番上に到達した時、
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        debugPrint(scrollView.contentOffset)
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
